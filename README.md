@@ -22,6 +22,13 @@
 
 This is a `simbashlog`-notifier for [Matrix](https://matrix.org/).
 
+It summarizes the log messages and sends them to a Matrix room.\
+End-to-end encryption is supported.
+
+### Example message
+
+![Example message](./images/example_message.png)
+
 ## Getting Started
 
 > It is possible that `pip` is not yet installed. If this is not the case, you will be prompted to install it. Confirm the installation.
@@ -85,7 +92,7 @@ It looks as follows:
 
 ```plain
 usage: simbashlog-matrix-notifier [-h] [--config CONFIG] [--pid PID] [--log-level LOG_LEVEL] [--message MESSAGE]
-                                   [--log-file LOG_FILE] [--json-log-file JSON_LOG_FILE]
+                                  [--log-file LOG_FILE] [--json-log-file JSON_LOG_FILE]
 
 Notifier for simbashlog.
 

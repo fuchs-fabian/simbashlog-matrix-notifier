@@ -27,7 +27,7 @@ End-to-end encryption is supported.
 
 ### Example message
 
-![Example message](./images/example_message.png)
+![Example message](./example_message.png)
 
 ## Getting Started
 

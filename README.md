@@ -1,4 +1,4 @@
-# `simbashlog-example-notifier`: Template for a `simbashlog`-notifier
+# `simbashlog-matrix-notifier`: `simbashlog`-notifier for [matrix.org](https://matrix.org/)
 
 <p align="center">
   <a href="./LICENSE">
@@ -10,11 +10,8 @@
   <table>
     <tr>
       <td>
-        <!--
-        TODO: Replace the URL with the URL of the repository.
-        -->
-        <a href="https://github.com/fuchs-fabian/simbashlog-example-notifier">
-          <img src="https://github-readme-stats.vercel.app/api/pin/?username=fuchs-fabian&repo=simbashlog-example-notifier&theme=holi&hide_border=true&border_radius=10" alt="Template repository simbashlog-example-notifier"/>
+        <a href="https://github.com/fuchs-fabian/simbashlog-matrix-notifier">
+          <img src="https://github-readme-stats.vercel.app/api/pin/?username=fuchs-fabian&repo=simbashlog-matrix-notifier&theme=holi&hide_border=true&border_radius=10" alt="Repository simbashlog-matrix-notifier"/>
         </a>
       </td>
     </tr>
@@ -23,11 +20,7 @@
 
 ## Description
 
-<!--
-TODO: Describe the purpose of the notifier.
--->
-
-This is a template for creating a Python notifier for `simbashlog`.
+This is a `simbashlog`-notifier for [Matrix](https://matrix.org/).
 
 ## Getting Started
 
@@ -35,12 +28,8 @@ This is a template for creating a Python notifier for `simbashlog`.
 
 ### Installation with `pip` (GitHub)
 
-<!--
-TODO: Replace the URL with the URL of the repository.
--->
-
 ```bash
-pip install git+https://github.com/fuchs-fabian/simbashlog-example-notifier
+pip install git+https://github.com/fuchs-fabian/simbashlog-matrix-notifier
 ```
 
 ### Installation with `pip` (Local)
@@ -57,33 +46,21 @@ pip install .
 pip list
 ```
 
-<!--
-TODO: Replace `simbashlog-example-notifier` with the name of the package defined in the `setup.py` file.
--->
-
 ```bash
-pip show simbashlog-example-notifier
+pip show simbashlog-matrix-notifier
 ```
 
 ### Configuration
 
 After installation, you will find the configuration file under:
 
-<!--
-TODO: Replace `simbashlog-example-notifier` with the name of the package defined in the `setup.py` file.
--->
-
 ```plain
-~/.config/simbashlog-notifier/simbashlog-example-notifier/config.json
+~/.config/simbashlog-notifier/simbashlog-matrix-notifier/config.json
 ```
 
 This configuration file is used by default if no other custom configuration file is specified.
 
 It looks as follows:
-
-<!--
-TODO: Replace with the actual content of the configuration file.
--->
 
 ```json
 {
@@ -97,18 +74,17 @@ TODO: Replace with the actual content of the configuration file.
     "show_in_footer_log_file_names": "false",
     "show_in_footer_host": "false",
     "show_in_footer_notifier_name": "true",
-    "example_key": "example_value"
+    "use_e2e": "true",
+    "room_id": "!xyz:matrix.org",
+    "access_token": "your_access_token_here",
+    "homeserver_url": "https://matrix-client.matrix.org"
 }
 ```
 
 ### Usage
 
-<!--
-TODO: Replace `simbashlog-example-notifier` with the name of the package defined in the `setup.py` file.
--->
-
 ```plain
-usage: simbashlog-example-notifier [-h] [--config CONFIG] [--pid PID] [--log-level LOG_LEVEL] [--message MESSAGE]
+usage: simbashlog-matrix-notifier [-h] [--config CONFIG] [--pid PID] [--log-level LOG_LEVEL] [--message MESSAGE]
                                    [--log-file LOG_FILE] [--json-log-file JSON_LOG_FILE]
 
 Notifier for simbashlog.
@@ -127,12 +103,8 @@ options:
 
 ### Uninstallation
 
-<!--
-TODO: Replace `simbashlog-example-notifier` with the name of the package defined in the `setup.py` file.
--->
-
 ```bash
-pip uninstall simbashlog-example-notifier
+pip uninstall simbashlog-matrix-notifier
 ```
 
 ## Bugs, Suggestions, Feedback, and Needed Support

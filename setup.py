@@ -15,25 +15,25 @@ import json
 # ░░░░░░░░░░░░░░░░░░░░░▓▓▓░░░░░░░░░░░░░░░░░░░░░░
 
 class NotifierConfig(Enum):
-    NAME = 'simbashlog-example-notifier'                                    # TODO: Replace with the name of your notifier but keep the prefix 'simbashlog-' and the suffix '-notifier'
-    VERSION = '1.0.0'                                                       # TODO: Replace with the version of your notifier
-    DESCRIPTION = 'simbashlog-notifier for example'                         # TODO: Replace with the description of your notifier
-    AUTHOR = 'Fabian Fuchs'                                                 # TODO: Replace with your name
-    PYTHON_VERSION = '>=3.10'                                               # TODO: Replace with the required Python version of your notifier
-    URL = 'https://github.com/fuchs-fabian/simbashlog-example-notifier'     # TODO: Replace with the repository URL of your notifier
-    KEYWORDS = [                                                            # TODO: Replace with the keywords of your notifier, at least add the notify type
-        'example',
+    NAME = 'simbashlog-matrix-notifier'
+    VERSION = '1.0.0'
+    DESCRIPTION = 'simbashlog-notifier for matrix.org'
+    AUTHOR = 'Fabian Fuchs'
+    PYTHON_VERSION = '>=3.10'
+    URL = 'https://github.com/fuchs-fabian/simbashlog-matrix-notifier'
+    KEYWORDS = [
+        'matrix',
     ]
-    INSTALL_REQUIRES = [                                                    # TODO: Add the required packages for your notifier that are not per default installed
+    INSTALL_REQUIRES = [
+        'matrix-notify @ git+https://github.com/fuchs-fabian/matrix-notify-py.git@v2.0.0',
     ]
-    NOTIFY_HELPER_VERSION = '1.6.1'                                         # TODO: Replace with the version of the simbashlog-notify-helper package that your notifier requires
-    CONFIG_FILE_KEY_REPLACEMENTS = {                                        # TODO: Add key replacements for the configuration file if you have changed the keys in a new version. It is kind of a migration for the configuration file
+    NOTIFY_HELPER_VERSION = '1.6.1'
+    CONFIG_FILE_KEY_REPLACEMENTS = {
         #'old_config_file_key': 'new_config_file_key',
     }
 
     @classmethod
     def get_data_for_config_file(cls):
-        # TODO: Define the default configuration values for your notifier. Replace the keys and values with the ones that are required for your notifier. This will be used to create later the json configuration file.
         return {
             # General
             'min_required_log_level': '6',                  # 0-7
@@ -51,7 +51,10 @@ class NotifierConfig(Enum):
             'show_in_footer_notifier_name': 'true',         # or 'false'
 
             # Notifier specific
-            'example_key': 'example_value',
+            'use_e2e': 'true',
+            'room_id': '!xyz:matrix.org',
+            'access_token': 'your_access_token_here',
+            'homeserver_url': 'https://matrix-client.matrix.org',
         }
 
 # ░░░░░░░░░░░░░░░░░░░░░▓▓▓░░░░░░░░░░░░░░░░░░░░░░

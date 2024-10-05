@@ -129,7 +129,7 @@ setup(
     },
     entry_points={
         'console_scripts': [
-            f'{NotifierConfig.NAME.value}={NotifierConfig.NAME.value.replace('-', '_')}:main',
+            '{}={}:main'.format(NotifierConfig.NAME.value, NotifierConfig.NAME.value.replace('-', '_')),
         ],
     },
 )

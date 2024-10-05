@@ -16,7 +16,7 @@ import json
 
 class NotifierConfig(Enum):
     NAME = 'simbashlog-matrix-notifier'
-    VERSION = '1.0.0'
+    VERSION = '1.0.1'
     DESCRIPTION = 'simbashlog-notifier for matrix.org'
     AUTHOR = 'Fabian Fuchs'
     PYTHON_VERSION = '>=3.10'

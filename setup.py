@@ -16,7 +16,7 @@ import json
 
 class NotifierConfig(Enum):
     NAME = 'simbashlog-matrix-notifier'
-    VERSION = '1.0.0'
+    VERSION = '1.0.1'
     DESCRIPTION = 'simbashlog-notifier for matrix.org'
     AUTHOR = 'Fabian Fuchs'
     PYTHON_VERSION = '>=3.10'
@@ -129,7 +129,7 @@ setup(
     },
     entry_points={
         'console_scripts': [
-            f'{NotifierConfig.NAME.value}={NotifierConfig.NAME.value.replace('-', '_')}:main',
+            '{}={}:main'.format(NotifierConfig.NAME.value, NotifierConfig.NAME.value.replace('-', '_')),
         ],
     },
 )

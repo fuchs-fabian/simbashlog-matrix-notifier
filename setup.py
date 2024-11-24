@@ -16,7 +16,7 @@ import json
 
 class NotifierConfig(Enum):
     NAME = 'simbashlog-matrix-notifier'
-    VERSION = '1.0.1'
+    VERSION = '1.0.2'
     DESCRIPTION = 'simbashlog-notifier for matrix.org'
     AUTHOR = 'Fabian Fuchs'
     PYTHON_VERSION = '>=3.10'
@@ -27,7 +27,7 @@ class NotifierConfig(Enum):
     INSTALL_REQUIRES = [
         'matrix-notify @ git+https://github.com/fuchs-fabian/matrix-notify-py.git@v2.0.0',
     ]
-    NOTIFY_HELPER_VERSION = '1.6.1'
+    NOTIFY_HELPER_VERSION = '1.6.2'
     CONFIG_FILE_KEY_REPLACEMENTS = {
         #'old_config_file_key': 'new_config_file_key',
     }
@@ -36,12 +36,12 @@ class NotifierConfig(Enum):
     def get_data_for_config_file(cls):
         return {
             # General
-            'min_required_log_level': '6',                  # 0-7
+            'min_required_log_level': '4',                  # 0-7
             'show_in_console_sent_message': 'true',         # or 'false'
             # Header
             'show_in_header_pid': 'false',                  # or 'true'
             # Body
-            'show_in_body_log_file_result': 'false',        # or 'true'
+            'show_in_body_log_file_result': 'true',         # or 'false'
             'show_in_body_log_file_content': 'false',       # or 'true'
             'show_in_body_summary_for_pid': 'false',        # or 'true'
             'show_in_body_summary_for_log_file': 'false',   # or 'true'

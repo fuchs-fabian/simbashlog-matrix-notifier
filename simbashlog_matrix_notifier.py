@@ -102,6 +102,18 @@ def load_config() -> snh.NotifierConfig:
         ]
     )
 
+def get_min_required_log_level(config: snh.NotifierConfig) -> int:
+    if config.min_required_log_level is not None:
+        min_required_log_level = int(config.min_required_log_level)
+
+        if not min_required_log_level in range(0, 8):
+            print(f"Invalid minimum required log level'{min_required_log_level}'")
+            sys.exit(1)
+
+        return min_required_log_level
+
+    return 7
+
 def create_message(config: snh.NotifierConfig, stored_log_info: snh.StoredLogInfo) -> str:
     builder = snh.MessageBuilder(
         stored_log_info = stored_log_info,
@@ -130,31 +142,19 @@ def create_message(config: snh.NotifierConfig, stored_log_info: snh.StoredLogInf
     return builder.build()
 
 def perform_action(config: snh.NotifierConfig, stored_log_info: snh.StoredLogInfo, message: str):
-    if config.min_required_log_level is not None:
-        min_required_log_level = int(config.min_required_log_level)
-        
-        if not min_required_log_level in range(0, 8):
-            print(f"Invalid minimum required log level'{min_required_log_level}'")
-            sys.exit(1)
+    notifier = mn.MatrixNotifier(
+        room_id=config.room_id,
+        access_token=config.access_token,
+        homeserver_url=config.homeserver_url
+    )
 
-        if stored_log_info.log_level is not None and stored_log_info.log_level > min_required_log_level:
-            print(f"Log level '{stored_log_info.log_level}' is less important than the minimum required log level '{min_required_log_level}'.")
-            print("No message sent.")
-            sys.exit(0)
+    html_message = mn.Helper.HTML.replace_spaces_and_new_lines(message)
 
-        notifier = mn.MatrixNotifier(
-            room_id=config.room_id,
-            access_token=config.access_token,
-            homeserver_url=config.homeserver_url
-        )
-
-        html_message = mn.Helper.HTML.replace_spaces_and_new_lines(message)
-
-        if config.show_in_console_sent_message:
-                notifier.send(html_message, config.use_e2e)
-        else:
-            with snh.suppress_output():
-                notifier.send(html_message, config.use_e2e)
+    if config.show_in_console_sent_message:
+            notifier.send(html_message, config.use_e2e)
+    else:
+        with snh.suppress_output():
+            notifier.send(html_message, config.use_e2e)
 
 # ░░░░░░░░░░░░░░░░░░░░░▓▓▓░░░░░░░░░░░░░░░░░░░░░░
 # ░░                                          ░░
@@ -165,23 +165,68 @@ def perform_action(config: snh.NotifierConfig, stored_log_info: snh.StoredLogInf
 # ░░░░░░░░░░░░░░░░░░░░░▓▓▓░░░░░░░░░░░░░░░░░░░░░░
 
 @snh.unexpected_exception_handler
-def notify(stored_log_info: snh.StoredLogInfo):
-    # Load configuration
-    config = load_config()
+def notify(config: snh.NotifierConfig, stored_log_info: snh.StoredLogInfo):
+    # Check if there are any log entries
+    if len(stored_log_info.data_df) == 0:
+        print("No matching log entries found. Nothing to notify.")
+        sys.exit(0)
 
     # Create message
     message = create_message(config, stored_log_info)
 
     # Perform action
-    perform_action(config, stored_log_info, message)
+    perform_action(config, message)
+
+@snh.unexpected_exception_handler
+def filter_log_data_by_min_required_log_level(config: snh.NotifierConfig, stored_log_info: snh.StoredLogInfo) -> None:
+    min_required_log_level = get_min_required_log_level(config)
+
+    if min_required_log_level == 7:
+        return
+
+    initial_count = len(stored_log_info.data_df)
+
+    stored_log_info.data_df[snh.DataFrameField.SEVERITY_CODE.value] = stored_log_info.data_df[snh.LogField.LEVEL.value].apply(
+        lambda level_name: snh.Severity.get_by_name(level_name).rfc_5424_numerical_code
+    )
+
+    stored_log_info.data_df.drop(
+        stored_log_info.data_df[stored_log_info.data_df[snh.DataFrameField.SEVERITY_CODE.value] > min_required_log_level].index,
+        inplace=True
+    )
+
+    stored_log_info.data_df.drop(columns=[snh.DataFrameField.SEVERITY_CODE.value], inplace=True)
+
+    final_count = len(stored_log_info.data_df)
+
+    # Set count for severity to 0 if the severity is greater than the minimum required log level
+    for column in stored_log_info.summary_df.columns:
+        try:
+            if column == snh.DataFrameField.PID.value:
+                continue
+
+            severity_code = snh.Severity.get_by_name(column).rfc_5424_numerical_code
+            if severity_code > min_required_log_level:
+                stored_log_info.summary_df[column] = 0
+        except AttributeError:
+            continue
+
+    if initial_count != final_count:
+        print(f"Ignored {initial_count - final_count} log entries with severity greater than {min_required_log_level} (Original count: {initial_count} | Final count: {final_count})")
 
 @snh.unexpected_exception_handler
 def main():
+    # Load configuration
+    config = load_config()
+
     # Process command-line arguments
     stored_log_info = snh.process_arguments()
 
+    # Filter log data by minimum required log level
+    filter_log_data_by_min_required_log_level(config, stored_log_info)
+
     # Notify
-    notify(stored_log_info)
+    notify(config, stored_log_info)
 
 if __name__ == "__main__":
     main()
